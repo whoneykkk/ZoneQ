@@ -16,4 +16,8 @@ public interface NoiseMeasurementRepository extends JpaRepository<NoiseMeasureme
     @Query("SELECT n FROM NoiseMeasurement n WHERE n.id IN " +
            "(SELECT MAX(n2.id) FROM NoiseMeasurement n2 WHERE n2.seat.id IN :seatIds GROUP BY n2.seat.id)")
     List<NoiseMeasurement> findLatestBySeatIds(@Param("seatIds") List<Long> seatIds);
+
+    @Query("SELECT n.noiseCategory, COUNT(n) FROM NoiseMeasurement n " +
+           "WHERE n.session.id IN :sessionIds GROUP BY n.noiseCategory")
+    List<Object[]> countByCategoryInSessions(@Param("sessionIds") List<Long> sessionIds);
 }
