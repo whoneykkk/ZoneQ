@@ -1,17 +1,25 @@
 package com.zoneq.domain.dashboard.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DashboardScheduler {
 
     private final DashboardService dashboardService;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedRate = 5000)
+    @Async("noiseAsyncExecutor")
     public void broadcast() {
-        dashboardService.broadcastRealtime();
+        try {
+            dashboardService.broadcastRealtime();
+        } catch (Exception e) {
+            log.warn("SSE broadcast failed: {}", e.getMessage());
+        }
     }
 }
