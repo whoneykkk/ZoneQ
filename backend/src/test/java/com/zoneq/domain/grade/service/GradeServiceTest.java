@@ -35,6 +35,7 @@ class GradeServiceTest {
     @Mock private SessionRepository sessionRepository;
     @Mock private NoiseMeasurementRepository noiseMeasurementRepository;
     @Mock private GradeHistoryRepository gradeHistoryRepository;
+    @Mock private org.springframework.context.ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private GradeService gradeService;
