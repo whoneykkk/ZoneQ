@@ -101,13 +101,12 @@ class DashboardServiceTest {
         Seat availableSeat = spy(Seat.of("B", 1));
         doReturn(SeatStatus.AVAILABLE).when(availableSeat).getStatus();
 
-        User adminUser = User.create("관리자", "admin@test.com", "pw", UserRole.ADMIN);
-        User gradedUser = spy(User.create("유저2", "u2@test.com", "pw", UserRole.USER));
-        doReturn("A").when(gradedUser).getGrade();
-
         when(seatRepository.findAll()).thenReturn(List.of(occupiedSeat, availableSeat));
         when(noiseMeasurementRepository.findLatestBySeatIds(anyList())).thenReturn(List.of());
-        when(userRepository.findAll()).thenReturn(List.of(mockUser, gradedUser, adminUser));
+        when(userRepository.countByGradeForUsers()).thenReturn(List.of(
+                new Object[]{null, 1L},
+                new Object[]{"A", 1L}
+        ));
         when(notificationRepository.countByTypeAndCreatedAtAfter(
                 eq(NotificationType.NOISE_WARNING), any(LocalDateTime.class))).thenReturn(3L);
 

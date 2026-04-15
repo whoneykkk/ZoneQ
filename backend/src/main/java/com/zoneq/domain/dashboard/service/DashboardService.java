@@ -10,8 +10,6 @@ import com.zoneq.domain.notification.repository.NotificationRepository;
 import com.zoneq.domain.seat.domain.Seat;
 import com.zoneq.domain.seat.domain.SeatStatus;
 import com.zoneq.domain.seat.repository.SeatRepository;
-import com.zoneq.domain.user.domain.User;
-import com.zoneq.domain.user.domain.UserRole;
 import com.zoneq.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +35,6 @@ public class DashboardService {
     private final NotificationRepository notificationRepository;
     private final SseEmitterRegistry registry;
 
-    @Transactional(readOnly = true)
     public SseEmitter subscribe() {
         SseEmitter emitter = new SseEmitter(30 * 60 * 1000L);
         String id = UUID.randomUUID().toString();
@@ -105,15 +103,12 @@ public class DashboardService {
         int warningCount = (int) notificationRepository.countByTypeAndCreatedAtAfter(
                 NotificationType.NOISE_WARNING, startOfToday);
 
-        List<User> userRoleUsers = userRepository.findAll().stream()
-                .filter(u -> u.getRole() == UserRole.USER)
-                .toList();
-
-        Map<String, Long> gradeCounts = userRoleUsers.stream()
-                .collect(Collectors.groupingBy(
-                        u -> u.getGrade() != null ? u.getGrade() : "UNGRADED",
-                        Collectors.counting()
-                ));
+        List<Object[]> gradeRows = userRepository.countByGradeForUsers();
+        Map<String, Long> gradeCounts = new HashMap<>();
+        for (Object[] row : gradeRows) {
+            String grade = row[0] != null ? row[0].toString() : "UNGRADED";
+            gradeCounts.put(grade, (Long) row[1]);
+        }
 
         GradeDistribution dist = new GradeDistribution(
                 gradeCounts.getOrDefault("S", 0L).intValue(),

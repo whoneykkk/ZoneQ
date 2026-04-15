@@ -14,7 +14,7 @@ public class DashboardScheduler {
     private final DashboardService dashboardService;
 
     @Scheduled(fixedRate = 5000)
-    @Async("noiseAsyncExecutor")
+    @Async("sseAsyncExecutor")
     public void broadcast() {
         try {
             dashboardService.broadcastRealtime();
