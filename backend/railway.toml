@@ -1,0 +1,7 @@
+[build]
+builder = "railpack"
+buildCommand = "./gradlew bootJar -x test"
+
+[deploy]
+startCommand = "java -jar build/libs/*.jar"
+healthcheckPath = "/api-docs"
