@@ -3,5 +3,5 @@ builder = "railpack"
 buildCommand = "./gradlew bootJar -x test"
 
 [deploy]
-startCommand = "java -jar build/libs/*.jar"
+startCommand = "java -Dserver.port=$PORT -jar build/libs/*.jar"
 healthcheckPath = "/api-docs"
