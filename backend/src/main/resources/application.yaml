@@ -39,10 +39,8 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: ${DB_URL}
+    url: "jdbc:${MYSQL_URL}"
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
