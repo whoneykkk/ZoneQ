@@ -23,7 +23,7 @@ export default function LoginPage() {
       setAuth(accessToken, null, refreshToken)
       const profile = await fetchProfileMe()
       setUser(profile)
-      navigate('/')
+      navigate(profile.seat ? '/' : '/checkin')
     } catch (e) {
       setError(e.response?.data?.message || '로그인에 실패했습니다.')
     } finally {

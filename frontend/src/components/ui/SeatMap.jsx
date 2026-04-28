@@ -1,6 +1,24 @@
 import { ZQ, ZONE_COLOR, OCC_BG, OCC_TEXT } from '../../utils/colors'
 
 function SeatCell({ zone, seat, isMine, mode = 'home', selected = false, onClick }) {
+  if (mode === 'checkin') {
+    if (seat.isOccupied) return (
+      <div style={{ borderRadius: 5, padding: '9px 2px', background: ZQ.avail, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ fontSize: 11, fontWeight: 800, color: ZQ.availText, fontFamily: "'NanumSquare_ac', sans-serif" }}>{seat.seatNumber}</span>
+      </div>
+    )
+    return (
+      <div onClick={onClick} style={{
+        borderRadius: 5, padding: '9px 2px', cursor: 'pointer',
+        background: selected ? ZONE_COLOR[zone] : OCC_BG[zone],
+        border: selected ? `2px solid ${ZONE_COLOR[zone]}` : '2px solid transparent',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.1s',
+      }}>
+        <span style={{ fontSize: 11, fontWeight: 800, color: selected ? '#fff' : OCC_TEXT[zone], fontFamily: "'NanumSquare_ac', sans-serif" }}>{seat.seatNumber}</span>
+      </div>
+    )
+  }
+
   if (mode === 'compose') {
     if (isMine) return (
       <div style={{ borderRadius: 5, padding: '9px 2px', background: ZQ.S, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -56,7 +74,9 @@ function ZoneSection({ zone, seats, mySeat, mode, selSeat, onSeatClick }) {
         {seats.map((s) => {
           const isMine = mySeat?.zone === zone && mySeat?.seatNumber === s.seatNumber
           const selected = selSeat?.zone === zone && selSeat?.seatNumber === s.seatNumber
-          const handleClick = s.isOccupied && !isMine ? () => onSeatClick?.(zone, s.seatNumber) : undefined
+          const handleClick = mode === 'checkin'
+            ? (!s.isOccupied ? () => onSeatClick?.(zone, s.seatNumber) : undefined)
+            : (s.isOccupied && !isMine ? () => onSeatClick?.(zone, s.seatNumber) : undefined)
           return (
             <SeatCell key={s.seatNumber} zone={zone} seat={s} isMine={isMine}
               mode={mode} selected={selected} onClick={handleClick} />
