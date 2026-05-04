@@ -254,6 +254,22 @@ function ZoneSection({ zone, seats, mySeat, mode, selSeat, onSeatClick }) {
   const color = ZONE_COLOR[zone];
   return (
     <div style={{ marginBottom: 10 }}>
+      {mode !== "compose" && (
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, paddingLeft: 10 }}>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 800,
+              color,
+              fontFamily: "'NanumSquare_ac', sans-serif",
+              letterSpacing: 0.3,
+            }}
+          >
+            {zone} ZONE
+          </span>
+          <div style={{ flex: 1, height: 1, background: color }} />
+        </div>
+      )}
       <div
         style={{
           display: "grid",
@@ -302,7 +318,7 @@ export default function SeatMap({
     <div>
       {["S", "A", "B", "C"].map((z) => {
         const zoneSeats = seats[z] || [];
-        if (zoneSeats.length === 0) return null;
+        if (mode === "compose" && zoneSeats.length === 0) return null;
         return (
           <ZoneSection
             key={z}
