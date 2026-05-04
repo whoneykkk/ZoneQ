@@ -87,7 +87,7 @@ export default function HomePage() {
   }, [user?.seat, user?.seatAssignedAt]);
 
   const { data: seatData } = useQuery({
-    queryKey: ["seats"],
+    queryKey: ["seats", user?.id],
     queryFn: fetchSeats,
     select: normalizeSeatData,
   });
