@@ -200,29 +200,11 @@ export default function HomePage() {
                 fontSize: 24,
                 fontWeight: 800,
                 color: ZQ.text,
-                marginBottom: 12,
                 fontFamily: "'NanumSquare_ac', sans-serif",
               }}
             >
               {countdown}
             </div>
-            <button
-              onClick={() => navigate("/extend-time")}
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                borderRadius: 8,
-                border: "none",
-                background: ZQ.S,
-                color: "#fff",
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "'NanumSquare_ac', sans-serif",
-              }}
-            >
-              + 시간 연장
-            </button>
           </div>
 
           {/* 현재 내 소음 */}

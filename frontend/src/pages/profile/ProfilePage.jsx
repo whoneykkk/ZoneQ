@@ -114,7 +114,7 @@ export default function ProfilePage() {
         {/* 액션 버튼 */}
         <div style={{ display: 'flex', gap: 16 }}>
           {[
-            { label: '시간 연장', bg: ZQ.blue, color: '#fff', bordered: false, action: null },
+            { label: '시간 연장', bg: ZQ.blue, color: '#fff', bordered: false, action: () => navigate('/extend-time') },
             { label: '공지사항', bg: '#fff', color: ZQ.text, bordered: true, action: () => navigate('/notices') },
             { label: '건의함',   bg: '#fff', color: ZQ.text, bordered: true, action: () => navigate('/messages/compose') },
           ].map((item) => (
