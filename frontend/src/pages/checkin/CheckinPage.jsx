@@ -84,7 +84,7 @@ export default function CheckinPage() {
       </div>
 
       <div style={{ padding: '16px' }}>
-        <SeatMap seats={seats} mode="checkin" onSeatClick={setSelectedSeat} selectedSeat={selectedSeat} />
+        <SeatMap seats={seats} mode="checkin" onSeatClick={(zone, seatNumber) => setSelectedSeat({ zone, seatNumber })} selectedSeat={selectedSeat} />
       </div>
 
       {selectedSeat && (
@@ -99,11 +99,16 @@ export default function CheckinPage() {
             padding: '20px 20px 40px', zIndex: 11,
           }}>
             <div style={{ width: 40, height: 4, borderRadius: 2, background: ZQ.border, margin: '0 auto 20px' }} />
-            <div style={{ fontSize: 18, fontWeight: 800, color: ZQ.text2, fontFamily: "'NanumSquare_ac', sans-serif", marginBottom: 8 }}>
-              체크인 하시겠습니까?
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+              <div style={{ padding: '6px 14px', borderRadius: 20, background: ZQ.Sbg, fontSize: 13, fontWeight: 700, color: ZQ.S, fontFamily: "'NanumSquare_ac', sans-serif" }}>
+                {selectedSeat.zone} ZONE · {selectedSeat.seatNumber}번 좌석
+              </div>
             </div>
-            <div style={{ fontSize: 14, color: ZQ.textSec, fontFamily: "'NanumSquare_ac', sans-serif", marginBottom: 24 }}>
-              <strong style={{ color: ZQ.text2 }}>{selectedSeat.zone} 구역 {selectedSeat.seatNumber}번</strong> 좌석에 체크인합니다.
+            <div style={{ fontSize: 18, fontWeight: 800, color: ZQ.text2, fontFamily: "'NanumSquare_ac', sans-serif", marginBottom: 8 }}>
+              체크인하시겠습니까?
+            </div>
+            <div style={{ fontSize: 14, color: ZQ.textMute, fontFamily: "'NanumSquare_ac', sans-serif", marginBottom: 24 }}>
+              선택한 좌석으로 이용이 시작됩니다.
             </div>
             {error && (
               <div style={{ fontSize: 12, color: ZQ.C, marginBottom: 12, fontFamily: "'NanumSquare_ac', sans-serif" }}>{error}</div>
@@ -112,14 +117,14 @@ export default function CheckinPage() {
               <button
                 onClick={() => setSelectedSeat(null)}
                 disabled={loading}
-                style={{ flex: 1, padding: '14px', borderRadius: 12, background: '#fff', border: `1px solid ${ZQ.border}`, fontSize: 15, fontWeight: 700, color: ZQ.textSec, cursor: 'pointer', fontFamily: "'NanumSquare_ac', sans-serif" }}
+                style={{ flex: 1, padding: '14px', borderRadius: 12, background: '#F5F5F3', border: 'none', fontSize: 15, fontWeight: 700, color: ZQ.textSec, cursor: 'pointer', fontFamily: "'NanumSquare_ac', sans-serif" }}
               >
                 취소
               </button>
               <button
                 onClick={handleCheckin}
                 disabled={loading}
-                style={{ flex: 1, padding: '14px', borderRadius: 12, background: '#1A1C1B', border: 'none', fontSize: 15, fontWeight: 800, color: '#fff', cursor: loading ? 'default' : 'pointer', fontFamily: "'NanumSquare_ac', sans-serif" }}
+                style={{ flex: 1, padding: '14px', borderRadius: 12, background: ZQ.S, border: 'none', fontSize: 15, fontWeight: 800, color: '#fff', cursor: loading ? 'default' : 'pointer', fontFamily: "'NanumSquare_ac', sans-serif" }}
               >
                 {loading ? '체크인 중...' : '체크인'}
               </button>

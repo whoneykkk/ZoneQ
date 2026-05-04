@@ -5,6 +5,8 @@ import com.zoneq.domain.noise.repository.NoiseMeasurementRepository;
 import com.zoneq.domain.profile.dto.NoiseCategoryRatio;
 import com.zoneq.domain.profile.dto.ProfileResponse;
 import com.zoneq.domain.profile.dto.ProfileUpdateRequest;
+import com.zoneq.domain.seat.domain.Seat;
+import com.zoneq.domain.seat.repository.SeatRepository;
 import com.zoneq.domain.session.domain.Session;
 import com.zoneq.domain.session.repository.SessionRepository;
 import com.zoneq.domain.user.domain.User;
@@ -27,6 +29,7 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
     private final NoiseMeasurementRepository noiseMeasurementRepository;
+    private final SeatRepository seatRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -36,7 +39,8 @@ public class ProfileService {
 
         long visitCount = sessionRepository.countByUserIdAndEndedAtIsNotNull(user.getId());
         NoiseCategoryRatio ratio = buildCategoryRatio(user.getId());
-        return ProfileResponse.of(user, visitCount, ratio);
+        Seat seat = seatRepository.findByUserId(user.getId()).orElse(null);
+        return ProfileResponse.of(user, visitCount, ratio, seat);
     }
 
     @Transactional
@@ -60,7 +64,8 @@ public class ProfileService {
 
         long visitCount = sessionRepository.countByUserIdAndEndedAtIsNotNull(user.getId());
         NoiseCategoryRatio ratio = buildCategoryRatio(user.getId());
-        return ProfileResponse.of(user, visitCount, ratio);
+        Seat seat = seatRepository.findByUserId(user.getId()).orElse(null);
+        return ProfileResponse.of(user, visitCount, ratio, seat);
     }
 
     private NoiseCategoryRatio buildCategoryRatio(Long userId) {
