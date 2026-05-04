@@ -21,6 +21,7 @@ import NoticeDetailPage from "./pages/notices/NoticeDetailPage";
 import NotificationsPage from "./pages/notifications/NotificationsPage";
 import DashboardPage from "./pages/dashboard/DashboardPage";
 import CheckinPage from "./pages/checkin/CheckinPage";
+import ExtendTimePage from "./pages/seats/ExtendTimePage";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/checkin", element: <CheckinPage /> },
+      { path: "/extend-time", element: <ExtendTimePage /> },
       { path: "/profile", element: <ProfilePage /> },
       { path: "/messages", element: <MessagesPage /> },
       { path: "/messages/:id", element: <MessageDetailPage /> },
