@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
+import { extendTime } from "../../api/seats";
 import BackHeader from "../../components/layout/BackHeader";
 import { ZQ } from "../../utils/colors";
 
@@ -32,6 +33,8 @@ export default function ExtendTimePage() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user?.seatAssignedAt) {
@@ -51,14 +54,22 @@ export default function ExtendTimePage() {
     setShowConfirm(true);
   };
 
-  const handleConfirmPayment = () => {
-    // TODO: Call extendTime API
-    // For now, just show success screen
-    setShowConfirm(false);
-    setDone(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+  const handleConfirmPayment = async () => {
+    if (!selectedPlan || loading) return;
+    setLoading(true);
+    setError("");
+    try {
+      await extendTime(selectedPlan.hours);
+      setShowConfirm(false);
+      setDone(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (e) {
+      setError(e.response?.data?.message || "시간 연장에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (done) {
@@ -400,6 +411,7 @@ export default function ExtendTimePage() {
             <div style={{ display: "flex", gap: 10 }}>
               <button
                 onClick={() => setShowConfirm(false)}
+                disabled={loading}
                 style={{
                   flex: 1,
                   padding: 14,
@@ -409,14 +421,16 @@ export default function ExtendTimePage() {
                   color: ZQ.text2,
                   fontSize: 14,
                   fontWeight: 700,
-                  cursor: "pointer",
+                  cursor: loading ? "default" : "pointer",
                   fontFamily: "'NanumSquare_ac', sans-serif",
+                  opacity: loading ? 0.5 : 1,
                 }}
               >
                 취소
               </button>
               <button
                 onClick={handleConfirmPayment}
+                disabled={loading}
                 style={{
                   flex: 1,
                   padding: 14,
@@ -426,13 +440,29 @@ export default function ExtendTimePage() {
                   color: "#fff",
                   fontSize: 14,
                   fontWeight: 700,
-                  cursor: "pointer",
+                  cursor: loading ? "default" : "pointer",
+                  fontFamily: "'NanumSquare_ac', sans-serif",
+                  opacity: loading ? 0.7 : 1,
+                }}
+              >
+                {loading ? "처리 중..." : "결제하기"}
+              </button>
+            </div>
+            {error && (
+              <div
+                style={{
+                  marginTop: 12,
+                  padding: 12,
+                  borderRadius: 8,
+                  background: "#FFE9E9",
+                  fontSize: 12,
+                  color: ZQ.C,
                   fontFamily: "'NanumSquare_ac', sans-serif",
                 }}
               >
-                결제하기
-              </button>
-            </div>
+                {error}
+              </div>
+            )}
           </div>
         </div>
       )}
