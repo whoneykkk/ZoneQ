@@ -18,7 +18,7 @@ function normalizeSeatData(apiData) {
   if (!apiData) return MOCK_SEATS
   const grouped = { S: [], A: [], B: [], C: [] }
   for (const seat of apiData) {
-    if (grouped[seat.zone]) grouped[seat.zone].push(seat)
+    if (grouped[seat.zone]) grouped[seat.zone].push({ ...seat, isOccupied: seat.status === 'OCCUPIED' })
   }
   const allEmpty = Object.values(grouped).every((arr) => arr.length === 0)
   return allEmpty ? MOCK_SEATS : grouped

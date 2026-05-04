@@ -75,8 +75,8 @@ function ZoneSection({ zone, seats, mySeat, mode, selSeat, onSeatClick }) {
           const isMine = mySeat?.zone === zone && mySeat?.seatNumber === s.seatNumber
           const selected = selSeat?.zone === zone && selSeat?.seatNumber === s.seatNumber
           const handleClick = mode === 'checkin'
-            ? (!s.isOccupied ? () => onSeatClick?.(zone, s.seatNumber) : undefined)
-            : (s.isOccupied && !isMine ? () => onSeatClick?.(zone, s.seatNumber) : undefined)
+            ? (!s.isOccupied ? () => onSeatClick?.(zone, s.seatNumber, s.id) : undefined)
+            : (s.isOccupied && !isMine ? () => onSeatClick?.(zone, s.seatNumber, s.id) : undefined)
           return (
             <SeatCell key={s.seatNumber} zone={zone} seat={s} isMine={isMine}
               mode={mode} selected={selected} onClick={handleClick} />
